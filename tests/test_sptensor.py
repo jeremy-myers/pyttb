@@ -107,6 +107,15 @@ def test_sptensor_initialization_from_function():
         in str(excinfo)
     )
 
+    # Random Tensor with large dimensions
+    def unit_uniform(shape) -> np.ndarray:
+        return np.random.uniform(low=0, high=1, size=shape)
+
+    shape = (int(1e6), int(1e6), int(1e6), int(1e6))
+    nz = 6
+    sptensorInstance = ttb.sptensor.from_function(unit_uniform, shape, nz)
+    assert sptensorInstance.shape == shape
+
 
 def test_sptensor_initialization_from_aggregator(sample_sptensor):
     subs = np.array([[1, 1, 1], [1, 1, 3], [2, 2, 2], [3, 3, 3], [1, 1, 1], [1, 1, 1]])

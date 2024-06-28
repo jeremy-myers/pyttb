@@ -9,6 +9,7 @@ from __future__ import annotations
 import logging
 import warnings
 from collections.abc import Iterable, Sequence
+from math import prod
 from typing import (
     Any,
     Callable,
@@ -210,13 +211,13 @@ class sptensor:
         """
         assert callable(function_handle), "function_handle must be callable"
 
-        if (nonzeros < 0) or (nonzeros >= np.prod(shape)):
+        if (nonzeros < 0) or (nonzeros >= prod(shape)):
             assert False, (
                 "Requested number of nonzeros must be positive "
                 "and less than the total size"
             )
         elif nonzeros < 1:
-            nonzeros = int(np.ceil(np.prod(shape) * nonzeros))
+            nonzeros = int(np.ceil(prod(shape) * nonzeros))
         else:
             nonzeros = int(np.floor(nonzeros))
         nonzeros = int(nonzeros)
