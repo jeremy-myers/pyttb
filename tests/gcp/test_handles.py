@@ -211,20 +211,21 @@ def test_beta_grad(sample_data_model):
 
 def test_zt_poisson(sample_data_model):
     data, model = sample_data_model
-    print(f"data = {data}")
-    print(f"model = {model}")
     result = handles.zt_poisson(data, model)
-    print(f"result = {result}")
-    expected = handles.poisson(data, model)
+    expected = np.zeros_like(result)
     for i, _ in enumerate(expected):
-        expected[i] += np.log(1 - np.exp(-model[i]) + EPS)
+        expected[i] = handles.poisson(data[i], model[i]) + np.log(
+            1 - np.exp(-model[i]) + EPS
+        )
     np.testing.assert_allclose(result, expected)
 
 
 def test_zt_poisson_grad(sample_data_model):
     data, model = sample_data_model
     result = handles.zt_poisson_grad(data, model)
-    expected = handles.poisson_grad(data, model)
+    expected = np.zeros_like(result)
     for i, _ in enumerate(expected):
-        expected[i] += 1 / (np.exp(model[i]) - 1 + EPS)
+        expected[i] = handles.poisson_grad(data[i], model[i]) + 1 / (
+            np.exp(model[i]) - 1 + EPS
+        )
     np.testing.assert_allclose(result, expected)
