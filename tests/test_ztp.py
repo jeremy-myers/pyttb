@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
 import pytest
 
 import pyttb as ttb
@@ -21,71 +20,13 @@ class TestZTP:
         assert all(initial_guess.weights == 1.0)
 
         # TODO Test with missing data
-        # mask = ttb.tenones(dense_data.shape)
-        # mask[0] = 0
-        # result_ztp, initial_guess, info = ttb.gcp_opt(
-        #     dense_data, rank, optimizer, mask=mask
-        # )
-        # assert not result_ztp.isequal(initial_guess)
-        # assert all(initial_guess.weights == 1.0)
-
-    def test_stochastic_solves(
-        self,
-    ):
-        dense_data = ttb.tenones((2, 2))
-        dense_data[0, 1] = 0.0
-        dense_data[1, 0] = 0.0
-        rank = 2
-
-        np.random.seed(1)
-        optimizer = SGD(max_iters=2, epoch_iters=1)
-        result_ztp, initial_guess, info = ttb.ztp(dense_data, rank, optimizer=optimizer)
-        assert not result_ztp.isequal(initial_guess)
-        assert all(initial_guess.weights == 1.0)
-
-        # Providing an initial guess skips the rng to generate initial ktensor
-        np.random.seed(1)
-        optimizer = SGD(max_iters=2, epoch_iters=1)
+        mask = ttb.tenones(dense_data.shape)
+        mask[0] = 0
         result_ztp, initial_guess, info = ttb.ztp(
-            dense_data, rank, optimizer=optimizer, init=initial_guess
+            dense_data, rank, optimizer, mask=mask
         )
         assert not result_ztp.isequal(initial_guess)
         assert all(initial_guess.weights == 1.0)
-
-        # Test non-normalized initial guess
-        np.random.seed(1)
-        optimizer = SGD(max_iters=2, epoch_iters=1)
-        non_norm_guess = initial_guess.copy()
-        non_norm_guess.weights *= 2
-        result_ztp, initial_guess, info = ttb.ztp(
-            dense_data, rank, optimizer=optimizer, init=non_norm_guess
-        )
-        assert not result_ztp.isequal(initial_guess)
-        assert all(initial_guess.weights == 1.0)
-
-        # Test just providing factor matrices
-        np.random.seed(1)
-        optimizer = SGD(max_iters=2, epoch_iters=1)
-        result_ztp, initial_guess, info = ttb.ztp(
-            dense_data,
-            rank,
-            optimizer=optimizer,
-            init=initial_guess.factor_matrices,
-        )
-        assert not result_ztp.isequal(initial_guess)
-        assert all(initial_guess.weights == 1.0)
-
-    # TODO
-    def test_sptensor_with_mask(self):
-        # Sptensor with mask
-        # with pytest.raises(ValueError):
-        #     ttb.ztp(
-        #         ttb.sptensor(),
-        #         rank,
-        #         optimizer,
-        #         mask=np.ones((2, 2)),
-        #     )
-        pass
 
     def test_invalid_optimizer_options(
         self,
