@@ -28,6 +28,7 @@ from pyttb.tenmat import tenmat
 from pyttb.tensor import tendiag, teneye, tenones, tenrand, tensor, tenzeros
 from pyttb.ttensor import ttensor
 from pyttb.tucker_als import tucker_als
+from pyttb.ztp import ztp
 
 
 def ignore_warnings(ignore=True):
@@ -67,4 +68,5 @@ __all__ = [  # noqa: PLE0604
     tenzeros.__name__,
     ttensor.__name__,
     tucker_als.__name__,
+    ztp.__name__,
 ]

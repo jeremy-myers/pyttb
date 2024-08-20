@@ -25,6 +25,7 @@ class Objectives(Enum):
     HUBER = 7
     NEGATIVE_BINOMIAL = 8
     BETA = 9
+    ZT_POISSON = 10
 
 
 def gaussian(data: np.ndarray, model: np.ndarray) -> np.ndarray:
